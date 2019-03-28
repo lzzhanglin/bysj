@@ -111,7 +111,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setStatus(200);
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        out.write("{\"token\":\"Bearer "+token+"\"}");
+        //将token写入response
+        out.write("Bearer "+token);
         out.flush();
         out.close();
 
