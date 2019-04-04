@@ -9,15 +9,17 @@ import com.cqjtu.bysj.service.AdminUserService;
 import com.cqjtu.bysj.service.AuthenticationService;
 import com.cqjtu.bysj.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 @RestController
+
 @RequestMapping("/course")
 public class CourseController {
 
@@ -30,6 +32,7 @@ public class CourseController {
     @Autowired
     private AdminUserService adminUserService;
 
+    @RolesAllowed({"TEACHER"})
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Resp createCourse(HttpServletRequest request) {
         String courseName = request.getParameter("courseName");
@@ -50,5 +53,29 @@ public class CourseController {
         courseService.createCourse(course);
         return new Resp(RespCode.SUCCESS);
 
+    }
+
+    @RequestMapping(value = "/getCourseList", method = RequestMethod.GET)
+    public Resp<List<Course>> getCourseList(HttpServletRequest request) {
+        String jobNo = request.getParameter("jobNo");
+        String jobNo1 = "1";
+        List<Course> courseList = courseService.getCourseList(jobNo1);
+        return new Resp<>(RespCode.SUCCESS, courseList);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public Resp updateCourse(HttpServletRequest request) {
+        String courseName = request.getParameter("courseName");
+        String courseIntro = request.getParameter("courseIntro");
+        String timeBegin = request.getParameter("timeBegin");
+        String timeEnd = request.getParameter("timeEnd");
+        Course course = new Course();
+        course.setCourseName(courseName);
+        course.setCourseIntro(courseIntro);
+        course.setTimeBegin(timeBegin);
+        course.setTimeEnd(timeEnd);
+        course.setTeacherId(Long.valueOf(authenticationService.getAuthentication().getName()));
+        courseService.updateCourse(course);
+        return new Resp(RespCode.SUCCESS);
     }
 }

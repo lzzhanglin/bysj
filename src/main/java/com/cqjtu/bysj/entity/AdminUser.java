@@ -1,6 +1,8 @@
 package com.cqjtu.bysj.entity;
 
 import com.cqjtu.bysj.mapper.AdminUserMapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
-
+@Getter
+@Setter
 public class AdminUser implements UserDetails {
 
     @Autowired
@@ -29,6 +32,7 @@ public class AdminUser implements UserDetails {
     private String username;
 
     private String password;
+
 
 
     private Collection<GrantedAuthority> authorities;
@@ -63,67 +67,10 @@ public class AdminUser implements UserDetails {
         this.birthday = birthday;
         this.username = username;
         this.password = password;
+        this.setAuthorities(authorities);
     }
 
-    public void setAuthorities(Collection<GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getJobNo() {
-        return jobNo;
-    }
-
-    public void setJobNo(String jobNo) {
-        this.jobNo = jobNo;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     @Override
     public String getPassword() {

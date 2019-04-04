@@ -30,7 +30,7 @@
             </if>
         </where>
     </select>
-    <select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">
+    <select id="getRoleListByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">
         select
         r.id roleId,
         r.role_name roleName

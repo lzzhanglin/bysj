@@ -45,7 +45,7 @@ public class MyUserDetailsService implements UserDetailsService  {
 //获取角色信息 ROLE_ADMIN ROLE_USER
     protected Collection<GrantedAuthority> getAuthorities(String jobNo){
         List<GrantedAuthority> authList = new ArrayList<>();
-        List<Role> roleList = adminUserMapper.getAuthByJobNo(jobNo);
+        List<Role> roleList = adminUserMapper.getRoleListByJobNo(jobNo);
         for (Role role : roleList) {
             authList.add(new SimpleGrantedAuthority(role.getRoleName()));
         }

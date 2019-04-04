@@ -12,5 +12,5 @@ public interface AdminUserMapper {
 
     AdminUser findUserByJobNo(@Param("jobNo") String jobNo);
 
-    List<Role> getAuthByJobNo(@Param("jobNo") String jobNo);
+    List<Role> getRoleListByJobNo(@Param("jobNo") String jobNo);
 }

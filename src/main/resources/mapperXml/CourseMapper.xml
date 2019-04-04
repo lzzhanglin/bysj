@@ -23,23 +23,40 @@
 
     </insert>
 
-    <!--<update id="updateArticle" parameterType="com.spring.demo.entity.Article"-->
-    <!--useGeneratedKeys="true" keyProperty="articleId">-->
-    <!--update article-->
-    <!--set title = #{title},-->
-    <!--content = #{content},-->
-    <!--category_id = #{categoryId}-->
-    <!--where id = #{articleId}-->
-    <!--</update>-->
+    <update id="updateCourse" parameterType="com.cqjtu.bysj.entity.Course"
+    useGeneratedKeys="true" keyProperty="courseId">
+    update course
+    set course_name = #{courseName},
+    course_intro = #{courseIntro},
+    time_begin = #{timeBegin},
+    time_end = #{timeEnd}
+        <where>
+            <if test="teacherId != null and teacherId !=''" >
+                and  teacher_id = #{teacherId}
+            </if>
+        </where>
+    </update>
 
-    <!--<select id="getPasswordByJobNo" resultType="string" parameterType="string">-->
-        <!--select password from admin_user-->
-        <!--<where>-->
-            <!--<if test="jobNo != null and jobNo !=''" >-->
-                <!--and  job_no = #{jobNo}-->
-            <!--</if>-->
-        <!--</where>-->
-    <!--</select>-->
+    <select id="getCourseList" resultType="com.cqjtu.bysj.entity.Course" parameterType="string">
+        select
+        id courseId,
+        course_name courseName,
+        course_kind courseKind,
+         course_intro courseIntro,
+         create_time createTime,
+         time_begin timeBegin,
+         time_end timeEnd,
+         teacher_id teacherId,
+         teacher_name teacherName,
+         elector_num electorNum
+
+         from course
+        <where>
+            <if test="jobNo != null and jobNo !=''" >
+                and  teacher_id = #{jobNo}
+            </if>
+        </where>
+    </select>
     <!--<select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">-->
         <!--select-->
         <!--r.id roleId,-->
