@@ -6,6 +6,7 @@ import com.cqjtu.bysj.mapper.AdminUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @Component
 @Service("myUserDetailsService")
-public class MyUserDetailsService implements UserDetailsService  {
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private AdminUserMapper adminUserMapper;
@@ -42,7 +43,7 @@ public class MyUserDetailsService implements UserDetailsService  {
         adminUser.setAuthorities(authList);
         return adminUser;
     }
-//获取角色信息 ROLE_ADMIN ROLE_USER
+//获取角色信息 ROLE_TEACHER ROLE_STUDENT
     protected Collection<GrantedAuthority> getAuthorities(String jobNo){
         List<GrantedAuthority> authList = new ArrayList<>();
         List<Role> roleList = adminUserMapper.getRoleListByJobNo(jobNo);

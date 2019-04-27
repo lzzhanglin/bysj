@@ -24,6 +24,8 @@ public class Course {
 
     private Long teacherId;
 
+    private String teacherJobNo;
+
     private String teacherName;
 
     private Integer electorNum;

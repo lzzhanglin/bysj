@@ -1,0 +1,12 @@
+
+D:\redis>redis-server.exe redis.windows.conf
+
+resultType:
+
+1、基本类型 ?：resultType=基本类型
+
+2、List类型： ? resultType=List中元素的类型
+
+3、Map类型 ? ?单条记录：resultType =map
+
+? ? ? ? ? ? ? ? ? ? ? ? ? 多条记录：resultType =Map中value的类型

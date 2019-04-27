@@ -3,7 +3,9 @@ package com.cqjtu.bysj.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cqjtu.bysj.entity.AdminUser;
+import com.cqjtu.bysj.entity.Role;
 import com.cqjtu.bysj.entity.Route;
+import com.cqjtu.bysj.mapper.AdminUserMapper;
 import com.cqjtu.bysj.security.GrantedAuthorityImpl;
 import com.cqjtu.bysj.service.AdminUserService;
 import com.cqjtu.bysj.service.serviceImpl.MyUserDetailsService;
@@ -13,6 +15,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,8 +42,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private AdminUserService adminUserService;
+
+
 
     public JwtLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -78,7 +81,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         username = username.trim();
 
 
-        ArrayList<GrantedAuthorityImpl> authorities = new ArrayList<>();
+        Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
 
 
         UsernamePasswordAuthenticationToken  authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
@@ -89,6 +92,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         return authenticate;
     }
+
+
 
 
 
@@ -173,8 +178,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         String routeStr = JSON.toJSON(lastRoute).toString();
 
         PrintWriter out = response.getWriter();
+        String jobNo = user.getJobNo();
 
-        out.write("{\"data\":{\"router\": "+routeStr+"},\"username\":"+"\""+uName+"\","+"\"role\":"+"\""+role+"\"}");
+        out.write("{\"data\":{\"router\": "+routeStr+"},\"username\":"+"\""+uName+"\","+"\"role\":"+"\""+role+"\",\"jobNo\":"+"\""+jobNo+"\"}");
         out.flush();
         out.close();
 

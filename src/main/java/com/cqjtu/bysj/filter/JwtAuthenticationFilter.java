@@ -1,11 +1,16 @@
 package com.cqjtu.bysj.filter;
 
+import com.cqjtu.bysj.config.FilterConfig;
+import com.cqjtu.bysj.service.serviceImpl.MyUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -15,11 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+
 
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -59,6 +69,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     /**
      * 解析token中的信息,并判断是否过期
      */
+    @Bean
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
 
 
@@ -79,10 +90,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
             throw new IllegalArgumentException("该账号已过期,请重新登陆");
         }
-
+//filter里面bean为空 此处authentication对象的authority为空 采用bean去获取authority 再赋值给authentication对象
+        if (myUserDetailsService == null) {
+            myUserDetailsService = (MyUserDetailsService) FilterConfig.getBean("myUserDetailsService");
+        }
 
         if (username != null) {
-            return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+
+            Collection<? extends GrantedAuthority> authorities = myUserDetailsService.loadUserByUsername(username).getAuthorities();
+            return new UsernamePasswordAuthenticationToken(username, null, authorities);
         }
         return null;
     }

@@ -35,4 +35,10 @@ public class CourseServiceImpl implements CourseService {
     public void updateCourse(Course course) {
         courseMapper.updateCourse(course);
     }
+
+    @Override
+    @Transactional
+    public void deleteCourse(Integer courseId) {
+        courseMapper.deleteCourse(courseId);
+    }
 }

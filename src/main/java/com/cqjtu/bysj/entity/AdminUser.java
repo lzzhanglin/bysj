@@ -14,8 +14,6 @@ import java.util.*;
 @Setter
 public class AdminUser implements UserDetails {
 
-    @Autowired
-    private AdminUserMapper adminUserMapper;
 
     private Long userId;
 
@@ -109,5 +107,6 @@ public class AdminUser implements UserDetails {
 
         return authorities;
     }
+
 
 }

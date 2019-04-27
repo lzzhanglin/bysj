@@ -2,99 +2,85 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper  namespace = "com.cqjtu.bysj.mapper.CourseMapper">
-    <insert id="createCourse"  parameterType="com.cqjtu.bysj.entity.Course"
-    useGeneratedKeys="true" keyProperty="courseId">
-    insert into course
-    (course_name,
-     course_intro,
-     course_kind,
-     time_begin,
-     time_end,
-     teacher_id,
-     teacher_name,
-     teacher_job_no)
-    values (#{courseName,jdbcType=VARCHAR},
-    #{courseIntro,jdbcType=VARCHAR},
-    #{courseKind,jdbcType=VARCHAR},
-    #{timeBegin,jdbcType=VARCHAR},
-    #{timeEnd,jdbcType=VARCHAR},
-    #{teacherId,jdbcType=BIGINT},
-    #{teacherName,jdbcType=VARCHAR},
-    #{teacherJobNo,jdbcType=VARCHAR})
+<mapper  namespace = "com.cqjtu.bysj.mapper.ChapterMapper">
+    <insert id="createChapter"  parameterType="com.cqjtu.bysj.entity.Chapter"
+            useGeneratedKeys="true" keyProperty="chapterId" >
+    insert into chapter
+    (creator_job_no,
+     chapter_order,
+     chapter_name,
+     chapter_content,
+
+     course_id)
+    values (#{creatorJobNo,jdbcType=VARCHAR},
+    #{chapterOrder,jdbcType=INTEGER},
+    #{chapterName,jdbcType=VARCHAR},
+    #{chapterContent,jdbcType=VARCHAR},
+    #{courseId,jdbcType=INTEGER})
 
     </insert>
 
-    <update id="updateCourse" parameterType="com.cqjtu.bysj.entity.Course"
-    useGeneratedKeys="true" keyProperty="courseId">
-    update course
-    set course_name = #{courseName},
-    course_kind = #{courseKind},
-    course_intro = #{courseIntro},
-    time_begin = #{timeBegin},
-    time_end = #{timeEnd}
+    <!--<update id="updateCourse" parameterType="com.cqjtu.bysj.entity.Course"-->
+            <!--useGeneratedKeys="true" keyProperty="courseId">-->
+        <!--update course-->
+        <!--set course_name = #{courseName},-->
+        <!--course_kind = #{courseKind},-->
+        <!--course_intro = #{courseIntro},-->
+        <!--time_begin = #{timeBegin},-->
+        <!--time_end = #{timeEnd}-->
+        <!--<where>-->
+            <!--<if test="courseId != null and courseId !=''" >-->
+                <!--and  id = #{courseId}-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</update>-->
+
+    <select id="getChapterList" resultType="com.cqjtu.bysj.entity.Chapter" parameterType="integer">
+        select
+        id chapterId,
+        chapter_name chapterName,
+        chapter_order chapterOrder,
+        chapter_content chapterContent,
+        create_time createTime
+
+
+        from chapter
         <where>
             <if test="courseId != null and courseId !=''" >
-                and  id = #{courseId}
-            </if>
-        </where>
-    </update>
-
-    <select id="getCourseList" resultType="com.cqjtu.bysj.entity.Course" parameterType="string">
-        select
-        id courseId,
-        course_name courseName,
-        create_time createTime,
-        (case course_kind
-         when 'xianxuan' then '限选'
-         when 'renxuan' then '任选'
-         else  '必修' end)
-         as  courseKind,
-         course_intro courseIntro,
-         create_time createTime,
-         time_begin timeBegin,
-         time_end timeEnd,
-         teacher_id teacherId,
-         teacher_name teacherName,
-         elector_num electorNum
-
-         from course
-        <where>
-            <if test="jobNo != null and jobNo !=''" >
-                and  teacher_job_no = #{jobNo}
+                and  course_id = #{courseId}
             </if>
         </where>
     </select>
     <!--<select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">-->
-        <!--select-->
-        <!--r.id roleId,-->
-        <!--r.role_name roleName-->
-        <!--from sys_user_roles s-->
-        <!--left join sys_role r-->
+    <!--select-->
+    <!--r.id roleId,-->
+    <!--r.role_name roleName-->
+    <!--from sys_user_roles s-->
+    <!--left join sys_role r-->
 
-        <!--on s.roles_id = r.id-->
-        <!--<where>-->
-            <!--<if test="jobNo != null and jobNo !=''" >-->
-                <!--and  job_no = #{jobNo}-->
-            <!--</if>-->
-        <!--</where>-->
+    <!--on s.roles_id = r.id-->
+    <!--<where>-->
+    <!--<if test="jobNo != null and jobNo !=''" >-->
+    <!--and  job_no = #{jobNo}-->
+    <!--</if>-->
+    <!--</where>-->
     <!--</select>-->
     <!--<select id="findUserByJobNo" resultType="com.cqjtu.bysj.entity.AdminUser" parameterType="string">-->
-        <!--select-->
-        <!--id userId,-->
-        <!--username,-->
-        <!--job_no jobNo,-->
-        <!--password,-->
-        <!--email,-->
-        <!--phone,-->
-        <!--sex,-->
-        <!--birthday-->
-        <!--from admin_user-->
-        <!--<where>-->
-            <!--<if test="jobNo != null and jobNo !=''" >-->
-                <!--and  job_no = #{jobNo}-->
-            <!--</if>-->
-        <!--</where>-->
+    <!--select-->
+    <!--id userId,-->
+    <!--username,-->
+    <!--job_no jobNo,-->
+    <!--password,-->
+    <!--email,-->
+    <!--phone,-->
+    <!--sex,-->
+    <!--birthday-->
+    <!--from admin_user-->
+    <!--<where>-->
+    <!--<if test="jobNo != null and jobNo !=''" >-->
+    <!--and  job_no = #{jobNo}-->
+    <!--</if>-->
+    <!--</where>-->
     <!--</select>-->
 
     <!--<select id="getArticleTotalNum" resultType="int" parameterType="long">-->
@@ -109,12 +95,12 @@
 
 
 
-    <delete id="deleteCourse" parameterType="integer">
-    delete from course
-    <if test="courseId !='' and courseId !=null">
-    where id = #{courseId}
-    </if>
-    </delete>
+    <!--<delete id="deleteCourse" parameterType="integer">-->
+        <!--delete from course-->
+        <!--<if test="courseId !='' and courseId !=null">-->
+            <!--where id = #{courseId}-->
+        <!--</if>-->
+    <!--</delete>-->
 
     <!--<select id="viewArticleById" parameterType="long" resultType="com.spring.demo.entity.Article">-->
     <!--select title ,-->

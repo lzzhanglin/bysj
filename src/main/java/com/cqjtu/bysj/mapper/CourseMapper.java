@@ -11,4 +11,6 @@ public interface CourseMapper {
     List<Course> getCourseList(@Param("jobNo") String jobNo);
 
     void updateCourse(Course course);
+
+    void deleteCourse(@Param("courseId") Integer courseId);
 }
