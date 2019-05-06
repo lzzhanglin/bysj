@@ -32,31 +32,18 @@
     <!--</where>-->
     <!--</update>-->
 
-    <!--<select id="getCourseList" resultType="com.cqjtu.bysj.entity.Course" parameterType="string">-->
-    <!--select-->
-    <!--id courseId,-->
-    <!--course_name courseName,-->
-    <!--create_time createTime,-->
-    <!--(case course_kind-->
-    <!--when 'xianxuan' then '限选'-->
-    <!--when 'renxuan' then '任选'-->
-    <!--else  '必修' end)-->
-    <!--as  courseKind,-->
-    <!--course_intro courseIntro,-->
-    <!--create_time createTime,-->
-    <!--time_begin timeBegin,-->
-    <!--time_end timeEnd,-->
-    <!--teacher_id teacherId,-->
-    <!--teacher_name teacherName,-->
-    <!--elector_num electorNum-->
-
-    <!--from course-->
-    <!--<where>-->
-    <!--<if test="jobNo != null and jobNo !=''" >-->
-    <!--and  teacher_job_no = #{jobNo}-->
-    <!--</if>-->
-    <!--</where>-->
-    <!--</select>-->
+    <select id="getCourseWareList" resultType="com.cqjtu.bysj.entity.CourseWare" parameterType="long">
+    select
+    id courseWareId,
+    course_ware_name courseWareName,
+    create_time createTime
+    from course_ware
+    <where>
+    <if test="chapterId != null and chapterId !=''" >
+    and  chapter_id = #{chapterId}
+    </if>
+    </where>
+    </select>
     <!--<select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">-->
     <!--select-->
     <!--r.id roleId,-->
@@ -101,12 +88,19 @@
 
 
 
-    <!--<delete id="deleteCourse" parameterType="integer">-->
-    <!--delete from course-->
-    <!--<if test="courseId !='' and courseId !=null">-->
-    <!--where id = #{courseId}-->
-    <!--</if>-->
-    <!--</delete>-->
+    <delete id="deleteCourseWare" parameterType="long">
+    delete from course_ware
+    <if test="courseWareId !='' and courseWareId !=null">
+    where id = #{courseWareId}
+    </if>
+    </delete>
+
+    <delete id="deleteCourseWareByCourseId" parameterType="long">
+        delete from course_ware
+        <if test="courseId !='' and courseId !=null">
+            where course_id = #{courseId}
+        </if>
+    </delete>
 
     <!--<select id="viewArticleById" parameterType="long" resultType="com.spring.demo.entity.Article">-->
     <!--select title ,-->

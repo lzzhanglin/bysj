@@ -24,4 +24,16 @@ public class ChapterServiceImpl implements ChapterService {
     public List<Chapter> getChapterList(Integer courseId) {
         return chapterMapper.getChapterList(courseId);
     }
+
+    @Override
+    public void deleteChapter(Long chapterID) {
+        chapterMapper.deleteChapter(chapterID);
+    }
+
+    @Override
+    public void deleteChapterByCourseId(Integer courseId) {
+        chapterMapper.deleteChapterByCourseId(courseId);
+    }
+
+
 }

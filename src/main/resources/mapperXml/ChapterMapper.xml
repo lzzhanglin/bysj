@@ -95,12 +95,19 @@
 
 
 
-    <!--<delete id="deleteCourse" parameterType="integer">-->
-        <!--delete from course-->
-        <!--<if test="courseId !='' and courseId !=null">-->
-            <!--where id = #{courseId}-->
-        <!--</if>-->
-    <!--</delete>-->
+    <delete id="deleteChapter" parameterType="long">
+        delete from chapter
+        <if test="chapterId !='' and chapterId !=null">
+            where id = #{chapterId}
+        </if>
+    </delete>
+
+    <delete id="deleteChapterByCourseId" parameterType="integer">
+        delete from chapter
+        <if test="courseId !='' and courseId !=null">
+            where course_id = #{courseId}
+        </if>
+    </delete>
 
     <!--<select id="viewArticleById" parameterType="long" resultType="com.spring.demo.entity.Article">-->
     <!--select title ,-->

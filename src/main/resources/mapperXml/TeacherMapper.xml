@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.TeacherMapper">
+    <insert id="createTeacher"  parameterType="com.cqjtu.bysj.entity.Teacher"
+            useGeneratedKeys="true" keyProperty="teacherId" >
+    insert into teacher
+    (teacher_name,
+     sex,
+     birthday,
+     education,
+     job_title,
+     `position`,
+     affiliated_college,
+     introduction)
+
+    values (#{teacherName,jdbcType=VARCHAR},
+    #{sex,jdbcType=VARCHAR},
+    #{birthDay,jdbcType=VARCHAR},
+    #{education,jdbcType=VARCHAR},
+    #{jobTitle,jdbcType=VARCHAR},
+    #{position,jdbcType=VARCHAR},
+    #{affiliatedCollege,jdbcType=VARCHAR},
+    #{introduction,jdbcType=VARCHAR})
+
+    </insert>
+    <update id="updateTeacher" parameterType="com.cqjtu.bysj.entity.Teacher"
+            useGeneratedKeys="true" keyProperty="teacherId">
+        update teacher
+        set teacher_name = #{teacherName},
+        sex = #{sex},
+        birthday = #{birthDay},
+        education = #{education},
+        job_title = #{jobTitle},
+        `position` = #{position},
+        affiliated_college = #{affiliatedCollege}
+        <where>
+            <if test="teacherId != null and teacherId !=''" >
+                and  id = #{teacherId}
+            </if>
+        </where>
+    </update>
+
+
+    <select id="getAllTeachers" resultType="com.cqjtu.bysj.entity.Teacher" >
+        select
+        id teacherId,
+        teacher_name teacherName,
+        sex,
+        birthday,
+        education,
+        job_title jobTitle,
+        `position`,
+        affiliated_college affiliatedCollege,
+        introduction
+
+
+        from teacher
+
+    </select>
+
+
+    <delete id="deleteTeacher" parameterType="long">
+        delete from teacher
+        <if test="teacherId !='' and teacherId !=null">
+            where id = #{teacherId}
+        </if>
+    </delete>
+
+
+
+
+
+
+
+
+
+</mapper>

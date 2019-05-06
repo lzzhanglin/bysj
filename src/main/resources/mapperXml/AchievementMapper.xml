@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.AchievementMapper">
+    <insert id="createAchievement"  parameterType="com.cqjtu.bysj.entity.Achievement"
+            useGeneratedKeys="true" keyProperty="achievementId" >
+    insert into achievement
+    (achievement_name,
+     achievement_kind,
+     detail)
+
+    values (
+    #{achievementName,jdbcType=VARCHAR},
+    #{achievementKind,jdbcType=VARCHAR},
+    #{detail,jdbcType=VARCHAR})
+
+    </insert>
+    <update id="updateAchievement" parameterType="com.cqjtu.bysj.entity.Achievement"
+            useGeneratedKeys="true" keyProperty="achievementId">
+        update achievement
+        set achievement_name = #{achievementName},
+        achievement_kind = #{achievementKind},
+        detail = #{detail}
+        <where>
+            <if test="achievementId != null and achievementId !=''" >
+                and  id = #{achievementId}
+            </if>
+        </where>
+    </update>
+
+
+    <select id="getAllAchievementsByKind" resultType="com.cqjtu.bysj.entity.Achievement" parameterType="string">
+        select
+        id achievementId,
+        achievement_name achievementName,
+        achievement_kind achievementKind,
+        detail,
+        create_time createTime
+        from achievement
+        <if test="achievementKind !='' and achievementKind !=null">
+            where achievement_kind = #{achievementKind}
+        </if>
+
+    </select>
+
+
+    <delete id="deleteAchievement" parameterType="long">
+        delete from achievement
+        <if test="achievementId !='' and achievementId !=null">
+            where id = #{achievementId}
+        </if>
+    </delete>
+
+
+
+
+
+
+
+
+
+</mapper>

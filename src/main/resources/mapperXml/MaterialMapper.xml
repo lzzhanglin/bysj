@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.MaterialMapper">
+    <insert id="createMaterial"  parameterType="com.cqjtu.bysj.entity.Material"
+            useGeneratedKeys="true" keyProperty="teacherId" >
+    insert into material
+    (material_name,
+     achievement_id,
+     creator_job_no)
+
+    values (#{materialName,jdbcType=VARCHAR},
+    #{achievementId,jdbcType=BIGINT},
+    #{creatorJobNo,jdbcType=VARCHAR})
+
+    </insert>
+
+
+
+    <select id="getMaterialListByAchievementId" resultType="com.cqjtu.bysj.entity.Material" parameterType="long" >
+        select
+        id materialId,
+        material_name materialName,
+        upload_time uploadTime,
+        achievement_id achievementId,
+        creator_job_no creatorJobNo
+        from material
+
+        <if test="achievementId !='' and achievementId !=null">
+            where achievement_id = #{achievementId}
+        </if>
+    </select>
+
+
+    <delete id="deleteMaterial" parameterType="long">
+        delete from material
+        <if test="materialId !='' and materialId !=null">
+            where id = #{materialId}
+        </if>
+    </delete>
+
+    <delete id="deleteMaterialByAchievementId" parameterType="long">
+        delete from material
+        <if test="achievementId !='' and achievementId !=null">
+            where achievement_id = #{achievementId}
+        </if>
+    </delete>
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -10,4 +10,8 @@ public interface ChapterMapper {
     Long createChapter(Chapter chapter);
 
     List<Chapter> getChapterList(@Param("courseId") Integer courseId);
+
+    void deleteChapter(@Param("chapterId") Long chapterId);
+
+    void deleteChapterByCourseId(@Param("courseId") Integer courseId);
 }

@@ -8,5 +8,11 @@ public interface ChapterService {
 
     Long createChapter(Chapter chapter);
 
-    public List<Chapter> getChapterList(Integer courseId);
+    List<Chapter> getChapterList(Integer courseId);
+
+    void deleteChapter(Long chapterId);
+
+    void deleteChapterByCourseId(Integer courseId);
+
+
 }

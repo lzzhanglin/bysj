@@ -4,6 +4,8 @@ import com.cqjtu.bysj.entity.Chapter;
 import com.cqjtu.bysj.entity.Resp;
 import com.cqjtu.bysj.entity.RespCode;
 import com.cqjtu.bysj.service.ChapterService;
+import com.cqjtu.bysj.service.CourseService;
+import com.cqjtu.bysj.service.CourseWareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,8 @@ public class ChapterController {
 
     @Autowired
     private ChapterService chapterService;
+    @Autowired
+    private CourseWareService courseWareService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public Resp createChapter(HttpServletRequest request) {
@@ -49,5 +53,14 @@ public class ChapterController {
         List<Chapter> chapterList = chapterService.getChapterList(courseId);
         return new Resp(RespCode.SUCCESS, chapterList);
         }
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    public Resp deleteChapter(HttpServletRequest request) {
+        Long chapterId = Long.valueOf(request.getParameter("chapterId"));
+        chapterService.deleteChapter(chapterId);
+        //删除章节的同时删除其附带的课件
+        courseWareService.deleteCourseWare(chapterId);
+        return new Resp(RespCode.SUCCESS);
     }
  }

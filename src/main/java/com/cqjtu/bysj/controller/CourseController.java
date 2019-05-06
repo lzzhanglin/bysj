@@ -5,10 +5,9 @@ import com.cqjtu.bysj.entity.AdminUser;
 import com.cqjtu.bysj.entity.Course;
 import com.cqjtu.bysj.entity.Resp;
 import com.cqjtu.bysj.entity.RespCode;
-import com.cqjtu.bysj.service.AdminUserService;
-import com.cqjtu.bysj.service.AuthenticationService;
-import com.cqjtu.bysj.service.CourseService;
+import com.cqjtu.bysj.service.*;
 import com.cqjtu.bysj.service.serviceImpl.MyUserDetailsService;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +39,12 @@ public class CourseController {
 
     @Autowired
     MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    private ChapterService chapterService;
+
+    @Autowired
+    private CourseWareService courseWareService;
 
 //    @RolesAllowed({"ROLE_TEACHER"})
 
@@ -102,6 +107,9 @@ public class CourseController {
     public Resp deleteCourse(HttpServletRequest request) {
         Integer courseId = Integer.valueOf(request.getParameter("courseId"));
         courseService.deleteCourse(courseId);
+        //删除课程的同时删除章节以及课件
+        chapterService.deleteChapterByCourseId(courseId);
+        courseWareService.deleteCourseWareByCourseId(courseId);
         return new Resp(RespCode.SUCCESS);
     }
 }
