@@ -1,10 +1,10 @@
 package com.cqjtu.bysj.controller;
 
-
 import com.cqjtu.bysj.entity.Material;
+import com.cqjtu.bysj.entity.PracticalCondition;
 import com.cqjtu.bysj.entity.Resp;
 import com.cqjtu.bysj.entity.RespCode;
-import com.cqjtu.bysj.service.MaterialService;
+import com.cqjtu.bysj.service.PracticalConditionService;
 import com.cqjtu.bysj.util.GetRandomFileName;
 import com.cqjtu.bysj.util.MediaTypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
+@RequestMapping("/practicalCondition")
 @RestController
-@RequestMapping("/material")
-public class MaterialController {
+public class PracticalConditionController {
 
     @Autowired
-    private MaterialService materialService;
+    private PracticalConditionService conditionService;
 
     @Autowired
     private ServletContext servletContext;
@@ -38,26 +38,26 @@ public class MaterialController {
         String path;
         //如果操作系统是Windows
         if (systemName.startsWith("Windows")) {
-            path = "D:\\bysj\\material\\";
+            path = "D:\\bysj\\experiment\\";
         }
         //如果是Linux
         else {
-            path = "/bysj/material/";
+            path = "/bysj/experiment/";
         }
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             GetRandomFileName randomFileName = new GetRandomFileName();
-            String materialName = randomFileName.getRandomFileName(fileName, 10);
+            String conditionName = randomFileName.getRandomFileName(fileName, 10);
             try {
                 BufferedOutputStream out = new BufferedOutputStream(
-                        new FileOutputStream(new File(path + materialName)));
+                        new FileOutputStream(new File(path + conditionName)));
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
                 String creatorJobNo = request.getParameter("creatorJobNo");
-                Long achievementId = Long.valueOf(request.getParameter("achievementId"));
-                Material material = new Material(materialName,achievementId,creatorJobNo);
-                materialService.createMaterial(material);
+                String describe = request.getParameter("describe");
+                PracticalCondition condition = new PracticalCondition(conditionName,creatorJobNo,describe);
+                conditionService.createPracticalCondition(condition);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -68,52 +68,40 @@ public class MaterialController {
         }
     }
 
-    @RequestMapping(value = "getMaterialList", method = RequestMethod.GET)
-    public Resp getMaterialList(HttpServletRequest request) {
-        Long achievementId = Long.valueOf(request.getParameter("achievementId"));
-        List<Material> materialList = materialService.getMaterialListByAchievementId(achievementId);
-        return new Resp(RespCode.SUCCESS, materialList);
+
+    @RequestMapping(value = "getAllImg", method = RequestMethod.GET)
+    public Resp getAllImg(HttpServletRequest request) {
+        List<PracticalCondition> conditionList = conditionService.getAllPracticalCondition();
+        return new Resp(RespCode.SUCCESS, conditionList);
     }
 
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
-    public Resp deleteMaterial(HttpServletRequest request) {
-        String string = request.getParameter("materialId");
-        Long materialId = Long.valueOf(request.getParameter("materialId"));
-        materialService.deleteMaterial(materialId);
-        return new Resp(RespCode.SUCCESS);
-    }
-
-    @RequestMapping(value = "/download",method = RequestMethod.GET)
-    public ResponseEntity<InputStreamResource> getDownload(HttpServletRequest request, HttpServletResponse response,
-                                                           @RequestHeader(required = false) String
-                                                                   range) throws FileNotFoundException {
-        String fileName = request.getParameter("materialName");
-
-        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
+    @RequestMapping(value = "/show",produces = MediaType.IMAGE_JPEG_VALUE,method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> getDownload(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+        List<PracticalCondition> conditionList = conditionService.getAllPracticalCondition();
+        String fileName = conditionList.get(0).getPracticalConditionName();
+        String imgName = request.getParameter("imgName");
+        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, imgName);
         String systemName = System.getProperty("os.name");
         String path;
         //如果操作系统是Windows
         if (systemName.startsWith("Windows")) {
-            path = "D:\\bysj\\material\\";
+            path = "D:\\bysj\\experiment\\";
         }
         //如果是Linux
         else {
-            path = "/bysj/material/";
+            path = "/bysj/experiment/";
         }
-
-
-        File file = new File(path  + fileName);
+        File file = new File(path  + imgName);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         String returnFileName = "";
         try {
-            returnFileName = new String(fileName.getBytes("GB2312"), "ISO-8859-1");
-
+            returnFileName = new String(imgName.getBytes("GB2312"), "ISO-8859-1");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return ResponseEntity.ok()
                 // Content-Disposition
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + returnFileName)
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + returnFileName)
                 // Content-Type
                 .contentType(mediaType)
                 // Contet-Length
@@ -121,4 +109,11 @@ public class MaterialController {
                 .body(resource);
     }
 
+    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    public Resp deleteImg(HttpServletRequest request) {
+        String string = request.getParameter("conditionId");
+        Long conditionId = Long.valueOf(request.getParameter("conditionId"));
+        conditionService.deletePracticalCondition(conditionId);
+        return new Resp(RespCode.SUCCESS);
+    }
 }

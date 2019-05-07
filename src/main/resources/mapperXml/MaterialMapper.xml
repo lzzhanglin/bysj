@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper  namespace = "com.cqjtu.bysj.mapper.MaterialMapper">
     <insert id="createMaterial"  parameterType="com.cqjtu.bysj.entity.Material"
-            useGeneratedKeys="true" keyProperty="teacherId" >
+            useGeneratedKeys="true" keyProperty="materialId" >
     insert into material
     (material_name,
      achievement_id,

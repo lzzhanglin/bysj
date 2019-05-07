@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.PracticalConditionMapper">
+    <insert id="createPracticalCondition"  parameterType="com.cqjtu.bysj.entity.PracticalCondition"
+            useGeneratedKeys="true" keyProperty="practicalConditionId" >
+    insert into practical_condition
+    (practical_condition_name,
+     creator_job_no,
+     `describe`)
+
+    values (#{practicalConditionName,jdbcType=VARCHAR},
+    #{creatorJobNo,jdbcType=VARCHAR},
+    #{describe,jdbcType=VARCHAR})
+
+    </insert>
+
+
+
+    <select id="getAllPracticalCondition" resultType="com.cqjtu.bysj.entity.PracticalCondition">
+        select
+        id practicalConditionId,
+        practical_condition_name practicalConditionName,
+        upload_time uploadTime,
+        creator_job_no creatorJobNo,
+        `describe`
+        from practical_condition
+
+
+    </select>
+
+
+    <delete id="deletePracticalCondition" parameterType="long">
+        delete from practical_condition
+        <if test="conditionId !='' and conditionId !=null">
+            where id = #{conditionId}
+        </if>
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

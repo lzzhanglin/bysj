@@ -42,11 +42,11 @@ public class CourseWareController {
         String path;
         //如果操作系统是Windows
         if (systemName.startsWith("Windows")) {
-            path = "D:\\upload\\";
+            path = "D:\\bysj\\courseWare\\";
         }
         //如果是Linux
         else {
-            path = "/upload/";
+            path = "/bysj/courseWare/";
         }
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
@@ -87,7 +87,6 @@ public class CourseWareController {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public Resp deleteCourseWare(HttpServletRequest request) {
         Long courseWareId = Long.valueOf(request.getParameter("courseWareId"));
-        String courseWareName = request.getParameter("courseWareName");
         courseWareService.deleteCourseWare(courseWareId);
         return new Resp(RespCode.SUCCESS);
     }
@@ -153,11 +152,11 @@ public class CourseWareController {
         String path;
         //如果操作系统是Windows
         if (systemName.startsWith("Windows")) {
-            path = "D:\\upload\\";
+            path = "D:\\bysj\\courseWare\\";
         }
         //如果是Linux
         else {
-            path = "/upload/";
+            path = "/bysj/courseWare/";
         }
 
 
