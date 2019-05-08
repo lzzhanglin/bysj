@@ -31,41 +31,17 @@ public class MaterialController {
     @Autowired
     private ServletContext servletContext;
 
-    @RequestMapping(value = "upload",method = RequestMethod.POST)
-    public Resp createCourseWare(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    @RequestMapping(value = "writeFileInfo",method = RequestMethod.POST)
+    public Resp writeFileInfo(HttpServletRequest request) {
+        String materialName = request.getParameter("materialName");
+        String creatorJobNo = request.getParameter("creatorJobNo");
+        Long achievementId = Long.valueOf(request.getParameter("achievementId"));
+        String externalLink = request.getParameter("externalLink");
 
-        String systemName = System.getProperty("os.name");
-        String path;
-        //如果操作系统是Windows
-        if (systemName.startsWith("Windows")) {
-            path = "D:\\bysj\\material\\";
-        }
-        //如果是Linux
-        else {
-            path = "/bysj/material/";
-        }
-        if (!file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
-            GetRandomFileName randomFileName = new GetRandomFileName();
-            String materialName = randomFileName.getRandomFileName(fileName, 10);
-            try {
-                BufferedOutputStream out = new BufferedOutputStream(
-                        new FileOutputStream(new File(path + materialName)));
-                out.write(file.getBytes());
-                out.flush();
-                out.close();
-                String creatorJobNo = request.getParameter("creatorJobNo");
-                Long achievementId = Long.valueOf(request.getParameter("achievementId"));
-                Material material = new Material(materialName,achievementId,creatorJobNo);
-                materialService.createMaterial(material);
+        Material material = new Material(materialName, achievementId, creatorJobNo, externalLink);
+        materialService.createMaterial(material);
+        return new Resp(RespCode.SUCCESS);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return new Resp(RespCode.SUCCESS);
-        }else {
-            return new Resp(RespCode.FAILED);
-        }
     }
 
     @RequestMapping(value = "getMaterialList", method = RequestMethod.GET)

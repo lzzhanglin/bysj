@@ -8,24 +8,37 @@
     insert into practical_condition
     (practical_condition_name,
      creator_job_no,
-     `describe`)
+     `describe`,
+     file_type,
+     external_link,
+     preview_link)
 
     values (#{practicalConditionName,jdbcType=VARCHAR},
     #{creatorJobNo,jdbcType=VARCHAR},
-    #{describe,jdbcType=VARCHAR})
+    #{describe,jdbcType=VARCHAR},
+    #{fileType,jdbcType=INTEGER},
+    #{externalLink,jdbcType=VARCHAR},
+    #{previewLink,jdbcType=VARCHAR})
 
     </insert>
 
 
 
-    <select id="getAllPracticalCondition" resultType="com.cqjtu.bysj.entity.PracticalCondition">
+    <select id="getAllFileByType" resultType="com.cqjtu.bysj.entity.PracticalCondition" parameterType="integer">
         select
         id practicalConditionId,
         practical_condition_name practicalConditionName,
         upload_time uploadTime,
         creator_job_no creatorJobNo,
-        `describe`
+        `describe`,
+        file_type fileType,
+        external_link externalLink,
+        preview_link previewLink
         from practical_condition
+        <if test="fileType !='' and fileType !=null">
+            where file_type = #{fileType}
+        </if>
+
 
 
     </select>

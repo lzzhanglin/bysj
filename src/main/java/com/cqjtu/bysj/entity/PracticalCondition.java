@@ -19,9 +19,19 @@ public class PracticalCondition {
 
     private String describe;
 
-    public PracticalCondition(String practicalConditionName, String creatorJobNo,String describe) {
+    private Integer fileType;
+
+    private String externalLink;
+
+    private String previewLink;
+
+    public PracticalCondition(String practicalConditionName, String creatorJobNo,
+                              String describe, Integer fileType,String externalLink, String previewLink) {
         this.practicalConditionName = practicalConditionName;
         this.creatorJobNo = creatorJobNo;
         this.describe = describe;
+        this.fileType = fileType;
+        this.externalLink = externalLink;
+        this.previewLink = previewLink;
     }
 }

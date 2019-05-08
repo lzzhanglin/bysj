@@ -17,17 +17,22 @@ public class Material {
 
     private String creatorJobNo;
 
-    public Material(String materialName, Long achievementId, String creatorJobNo) {
+    private String externalLink;
+
+    public Material(String materialName, Long achievementId, String creatorJobNo, String externalLink) {
         this.materialName = materialName;
         this.achievementId = achievementId;
         this.creatorJobNo = creatorJobNo;
+        this.externalLink = externalLink;
     }
 
-    public Material(Long materialId, String materialName, String uploadTime, Long achievementId, String creatorJobNo) {
+    public Material(Long materialId, String materialName, String uploadTime,
+                    Long achievementId, String creatorJobNo, String externalLink) {
         this.materialId = materialId;
         this.materialName = materialName;
         this.uploadTime = uploadTime;
         this.achievementId = achievementId;
         this.creatorJobNo = creatorJobNo;
+        this.externalLink = externalLink;
     }
 }

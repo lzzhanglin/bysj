@@ -8,7 +8,7 @@ public interface PracticalConditionService {
 
     void createPracticalCondition(PracticalCondition condition);
 
-    List<PracticalCondition> getAllPracticalCondition();
+    List<PracticalCondition> getAllFileByType(Integer fileType);
 
     void deletePracticalCondition(Long conditionId);
 }

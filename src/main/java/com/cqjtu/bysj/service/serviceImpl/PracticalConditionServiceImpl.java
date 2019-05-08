@@ -20,8 +20,8 @@ public class PracticalConditionServiceImpl implements PracticalConditionService 
         conditionMapper.createPracticalCondition(condition);
     }
 
-    public List<PracticalCondition> getAllPracticalCondition(){
-        return conditionMapper.getAllPracticalCondition();
+    public List<PracticalCondition> getAllFileByType(Integer fileType){
+        return conditionMapper.getAllFileByType(fileType);
     }
 
     public void deletePracticalCondition(Long conditionId) {

@@ -8,11 +8,13 @@
     insert into material
     (material_name,
      achievement_id,
-     creator_job_no)
+     creator_job_no,
+     external_link)
 
     values (#{materialName,jdbcType=VARCHAR},
     #{achievementId,jdbcType=BIGINT},
-    #{creatorJobNo,jdbcType=VARCHAR})
+    #{creatorJobNo,jdbcType=VARCHAR},
+    #{externalLink,jdbcType=VARCHAR})
 
     </insert>
 
@@ -24,7 +26,8 @@
         material_name materialName,
         upload_time uploadTime,
         achievement_id achievementId,
-        creator_job_no creatorJobNo
+        creator_job_no creatorJobNo,
+        external_link externalLink
         from material
 
         <if test="achievementId !='' and achievementId !=null">

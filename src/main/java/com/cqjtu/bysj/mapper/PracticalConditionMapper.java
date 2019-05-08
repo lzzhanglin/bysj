@@ -9,7 +9,7 @@ public interface PracticalConditionMapper {
 
     void createPracticalCondition(PracticalCondition condition);
 
-    List<PracticalCondition> getAllPracticalCondition();
+    List<PracticalCondition> getAllFileByType(@Param("fileType")Integer fileType);
 
     void deletePracticalCondition(@Param("conditionId") Long conditionId);
 }
