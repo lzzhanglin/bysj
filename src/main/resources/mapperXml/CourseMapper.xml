@@ -40,7 +40,7 @@
         </where>
     </update>
 
-    <select id="getCourseList" resultType="com.cqjtu.bysj.entity.Course" parameterType="string">
+    <select id="getCourseList" resultType="com.cqjtu.bysj.entity.Course" >
         select
         id courseId,
         course_name courseName,
@@ -59,11 +59,7 @@
          elector_num electorNum
 
          from course
-        <where>
-            <if test="jobNo != null and jobNo !=''" >
-                and  teacher_job_no = #{jobNo}
-            </if>
-        </where>
+
     </select>
     <!--<select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">-->
         <!--select-->

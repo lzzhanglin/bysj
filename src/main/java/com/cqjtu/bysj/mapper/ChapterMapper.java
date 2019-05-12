@@ -14,4 +14,6 @@ public interface ChapterMapper {
     void deleteChapter(@Param("chapterId") Long chapterId);
 
     void deleteChapterByCourseId(@Param("courseId") Integer courseId);
+
+    void updateChapter(Chapter chapter);
 }

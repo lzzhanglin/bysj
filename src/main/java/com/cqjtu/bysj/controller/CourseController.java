@@ -77,8 +77,7 @@ public class CourseController {
 
     @RequestMapping(value = "/getCourseList", method = RequestMethod.GET)
     public Resp<List<Course>> getCourseList(HttpServletRequest request) {
-        String jobNo = request.getParameter("jobNo");
-        List<Course> courseList = courseService.getCourseList(jobNo);
+        List<Course> courseList = courseService.getCourseList();
         return new Resp<>(RespCode.SUCCESS, courseList);
     }
     @Secured("ROLE_TEACHER")

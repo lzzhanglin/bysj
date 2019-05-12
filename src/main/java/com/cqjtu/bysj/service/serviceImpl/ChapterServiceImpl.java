@@ -35,5 +35,10 @@ public class ChapterServiceImpl implements ChapterService {
         chapterMapper.deleteChapterByCourseId(courseId);
     }
 
+    @Override
+    public void updateChapter(Chapter chapter){
+        chapterMapper.updateChapter(chapter);
+    }
+
 
 }

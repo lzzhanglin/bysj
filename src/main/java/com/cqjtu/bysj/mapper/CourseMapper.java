@@ -8,7 +8,7 @@ import java.util.List;
 public interface CourseMapper {
     void createCourse(Course course);
 
-    List<Course> getCourseList(@Param("jobNo") String jobNo);
+    List<Course> getCourseList();
 
     void updateCourse(Course course);
 

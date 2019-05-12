@@ -9,39 +9,38 @@
     (creator_job_no,
      chapter_order,
      chapter_name,
-     chapter_content,
-
-     course_id)
+     course_id,
+     course_name)
     values (#{creatorJobNo,jdbcType=VARCHAR},
     #{chapterOrder,jdbcType=INTEGER},
     #{chapterName,jdbcType=VARCHAR},
-    #{chapterContent,jdbcType=VARCHAR},
-    #{courseId,jdbcType=INTEGER})
+    #{courseId,jdbcType=INTEGER},
+    #{courseName,jdbcType=VARCHAR})
 
     </insert>
 
-    <!--<update id="updateCourse" parameterType="com.cqjtu.bysj.entity.Course"-->
-            <!--useGeneratedKeys="true" keyProperty="courseId">-->
-        <!--update course-->
-        <!--set course_name = #{courseName},-->
-        <!--course_kind = #{courseKind},-->
-        <!--course_intro = #{courseIntro},-->
-        <!--time_begin = #{timeBegin},-->
-        <!--time_end = #{timeEnd}-->
-        <!--<where>-->
-            <!--<if test="courseId != null and courseId !=''" >-->
-                <!--and  id = #{courseId}-->
-            <!--</if>-->
-        <!--</where>-->
-    <!--</update>-->
+    <update id="updateChapter" parameterType="com.cqjtu.bysj.entity.Chapter"
+            useGeneratedKeys="true" keyProperty="chapterId">
+        update chapter
+        set chapter_name = #{chapterName},
+        chapter_order = #{chapterOrder},
+        course_id = #{courseId},
+        course_name = #{courseName}
+        <where>
+            <if test="chapterId != null and chapterId !=''" >
+                and  id = #{chapterId}
+            </if>
+        </where>
+    </update>
 
     <select id="getChapterList" resultType="com.cqjtu.bysj.entity.Chapter" parameterType="integer">
         select
         id chapterId,
         chapter_name chapterName,
         chapter_order chapterOrder,
-        chapter_content chapterContent,
-        create_time createTime
+        create_time createTime,
+        course_id courseId,
+        course_name courseName
 
 
         from chapter

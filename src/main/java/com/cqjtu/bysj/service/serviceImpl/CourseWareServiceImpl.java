@@ -22,8 +22,13 @@ public class CourseWareServiceImpl implements CourseWareService {
     }
 
     @Override
-    public List<CourseWare> getCourseWareList(Long chapterId) {
-        return courseWareMapper.getCourseWareList(chapterId);
+    public List<CourseWare> getCourseWareList(Long chapterId, Integer wareType) {
+        return courseWareMapper.getCourseWareList(chapterId,wareType);
+    }
+
+    @Override
+    public List<CourseWare> getCourseWareListByCourseId(Integer courseId, Integer wareType){
+        return courseWareMapper.getCourseWareListByCourseId(courseId, wareType);
     }
 
     @Override

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.SolutionMapper">
+    <insert id="createSolution"  parameterType="com.cqjtu.bysj.entity.Solution"
+            useGeneratedKeys="true" keyProperty="solutionId">
+    insert into solution
+    (creator_job_no,
+     solution_name,
+     course_id,
+     exercise_id,
+     external_link,
+     preview_link)
+    values (#{creatorJobNo,jdbcType=VARCHAR},
+    #{solutionName,jdbcType=VARCHAR},
+    #{courseId,jdbcType=BIGINT},
+    #{exerciseId,jdbcType=BIGINT},
+    #{externalLink,jdbcType=VARCHAR},
+    #{previewLink,jdbcType=VARCHAR})
+
+    </insert>
+
+
+
+    <select id="getSolutionList" resultType="com.cqjtu.bysj.entity.Solution" parameterType="long">
+        select
+        id solutionId,
+        solution_name solutionName,
+        exercise_id exerciseId,
+
+        external_link externalLink,
+        preview_link previewLink,
+        upload_time uploadTime,
+        creator_job_no creatorJobNo,
+        course_id courseId
+
+
+
+        from solution
+        <where>
+            <if test="exerciseId != null and exerciseId !=''" >
+                and  exercise_id = #{exerciseId}
+            </if>
+
+
+        </where>
+    </select>
+
+
+    <!--<select id="getSolutionListByCourseId" resultType="com.cqjtu.bysj.entity.Solution" parameterType="map">-->
+        <!--select-->
+        <!--id courseWareId,-->
+        <!--solution_name courseWareName,-->
+        <!--create_time createTime,-->
+        <!--external_link externalLink,-->
+        <!--preview_link previewLink,-->
+        <!--ware_type wareType-->
+
+        <!--from solution-->
+        <!--<where>-->
+            <!--<if test="courseId != null and courseId !=''" >-->
+                <!--and  course_id = #{courseId}-->
+            <!--</if>-->
+
+            <!--<if test="wareType != null and wareType !=''" >-->
+                <!--and  ware_type = #{wareType}-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
+
+
+
+
+    <delete id="deleteSolution" parameterType="long">
+        delete from solution
+        <if test="solutionId !='' and solutionId !=null">
+            where id = #{solutionId}
+        </if>
+    </delete>
+
+    <!--<delete id="deleteSolutionByCourseId" parameterType="long">-->
+        <!--delete from solution-->
+        <!--<if test="courseId !='' and courseId !=null">-->
+            <!--where course_id = #{courseId}-->
+        <!--</if>-->
+    <!--</delete>-->
+
+
+
+
+
+</mapper>

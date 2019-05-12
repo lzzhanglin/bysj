@@ -6,11 +6,13 @@ import com.cqjtu.bysj.entity.RespCode;
 import com.cqjtu.bysj.service.ChapterService;
 import com.cqjtu.bysj.service.CourseService;
 import com.cqjtu.bysj.service.CourseWareService;
+import org.omg.PortableInterceptor.LOCATION_FORWARD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
@@ -28,15 +30,15 @@ public class ChapterController {
     public Resp createChapter(HttpServletRequest request) {
         String chapterName = request.getParameter("chapterName");
         Integer chapterOrder = Integer.valueOf(request.getParameter("chapterOrder"));
-        String chapterContent = request.getParameter("chapterContent");
         String creatorJobNo = request.getParameter("creatorJobNo");
         Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        String courseName = request.getParameter("courseName");
         Chapter chapter = new Chapter();
         chapter.setChapterName(chapterName);
         chapter.setChapterOrder(chapterOrder);
-        chapter.setChapterContent(chapterContent);
         chapter.setCreatorJobNo(creatorJobNo);
         chapter.setCourseId(courseId);
+        chapter.setCourseName(courseName);
         Long chapterId =  chapterService.createChapter(chapter);
         return new Resp(RespCode.SUCCESS,chapterId);
     }
@@ -62,5 +64,23 @@ public class ChapterController {
         //删除章节的同时删除其附带的课件
         courseWareService.deleteCourseWare(chapterId);
         return new Resp(RespCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public Resp updateChapter(HttpServletRequest request) {
+        String chapterName = request.getParameter("chapterName");
+        String courseName = request.getParameter("courseName");
+        Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        Long chapterId = Long.valueOf(request.getParameter("chapterId"));
+        Integer chapterOrder = Integer.valueOf(request.getParameter("chapterOrder"));
+        Chapter chapter = new Chapter();
+        chapter.setCourseName(courseName);
+        chapter.setCourseId(courseId);
+        chapter.setChapterOrder(chapterOrder);
+        chapter.setChapterName(chapterName);
+        chapter.setChapterId(chapterId);
+        chapterService.updateChapter(chapter);
+        return new Resp(RespCode.SUCCESS);
+
     }
  }

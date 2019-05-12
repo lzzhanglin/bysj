@@ -10,7 +10,7 @@ public interface CourseService {
 
     void createCourse(Course course);
 
-    List<Course> getCourseList(String jobNo);
+    List<Course> getCourseList();
 
     void updateCourse(Course course);
 

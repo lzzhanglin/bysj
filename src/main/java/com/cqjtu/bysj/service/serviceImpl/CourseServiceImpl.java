@@ -26,8 +26,8 @@ public class CourseServiceImpl implements CourseService {
     }
     @Override
     @Transactional
-    public List<Course> getCourseList(String jobNo) {
-        return courseMapper.getCourseList(jobNo);
+    public List<Course> getCourseList() {
+        return courseMapper.getCourseList();
     }
 
     @Override

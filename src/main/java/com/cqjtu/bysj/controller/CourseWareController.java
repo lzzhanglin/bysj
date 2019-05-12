@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @RestController
@@ -35,52 +36,46 @@ public class CourseWareController {
     @Autowired
     private ServletContext servletContext;
 
-    @RequestMapping(value = "upload",method = RequestMethod.POST)
-    public Resp createCourseWare(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    @RequestMapping(value = "writeFileInfo",method = RequestMethod.POST)
+    public Resp writeFileInfo(HttpServletRequest request) {
 
-        String systemName = System.getProperty("os.name");
-        String path;
-        //如果操作系统是Windows
-        if (systemName.startsWith("Windows")) {
-            path = "D:\\bysj\\courseWare\\";
-        }
-        //如果是Linux
-        else {
-            path = "/bysj/courseWare/";
-        }
-        if (!file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
-            GetRandomFileName randomFileName = new GetRandomFileName();
-            String courseWareName = randomFileName.getRandomFileName(fileName, 10);
-            try {
-                BufferedOutputStream out = new BufferedOutputStream(
-                        new FileOutputStream(new File(path + courseWareName)));
-                out.write(file.getBytes());
-                out.flush();
-                out.close();
-                String creatorJobNo = request.getParameter("creatorJobNo");
-                Long chapterId = Long.valueOf(request.getParameter("chapterId"));
-                Integer courseId = Integer.valueOf(request.getParameter("courseId"));
-                CourseWare courseWare = new CourseWare();
-                courseWare.setCourseWareName(courseWareName);
-                courseWare.setCreatorJobNo(creatorJobNo);
-                courseWare.setCourseId(courseId);
-                courseWare.setChapterId(chapterId);
-                courseWareService.createCourseWare(courseWare);
+        String fileName = request.getParameter("courseWareName");
+        String externalLink = request.getParameter("externalLink");
+        String previewLink = request.getParameter("previewLink");
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        String chapterIdStr = request.getParameter("chapterId");
+        String creatorJobNo = request.getParameter("creatorJobNo");
+        Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        Integer wareType = Integer.valueOf(request.getParameter("wareType"));
+        CourseWare courseWare = new CourseWare();
+        if (!Objects.equals(chapterIdStr, null)) {
+            courseWare.setChapterId(Long.valueOf(chapterIdStr));
+        }
+        courseWare.setCourseWareName(fileName);
+        courseWare.setCreatorJobNo(creatorJobNo);
+        courseWare.setCourseId(courseId);
+        courseWare.setExternalLink(externalLink);
+        courseWare.setPreviewLink(previewLink);
+        courseWare.setWareType(wareType);
+        courseWareService.createCourseWare(courseWare);
+
+
             return new Resp(RespCode.SUCCESS);
-        }else {
-            return new Resp(RespCode.FAILED);
-        }
+
     }
 
     @RequestMapping(value = "getCourseWareList",method = RequestMethod.GET)
     public Resp getCourseWareList(HttpServletRequest request) {
         Long chapterId = Long.valueOf(request.getParameter("chapterId"));
-        List<CourseWare> courseWareList = courseWareService.getCourseWareList(chapterId);
+        Integer wareType = Integer.valueOf(request.getParameter("wareType"));
+        List<CourseWare> courseWareList = courseWareService.getCourseWareList(chapterId, wareType);
+        return new Resp(RespCode.SUCCESS, courseWareList);
+    }
+    @RequestMapping(value = "getCourseWareListByCourseId",method = RequestMethod.GET)
+    public Resp getCourseWareListByCourseId(HttpServletRequest request) {
+        Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        Integer wareType = Integer.valueOf(request.getParameter("wareType"));
+        List<CourseWare> courseWareList = courseWareService.getCourseWareListByCourseId(courseId, wareType);
         return new Resp(RespCode.SUCCESS, courseWareList);
     }
 
@@ -92,54 +87,6 @@ public class CourseWareController {
     }
 
 
-//    @RequestMapping(value = "/download",method = RequestMethod.GET)
-//    public void getDownload(HttpServletRequest request, HttpServletResponse response,
-//                                                           @RequestHeader(required = false) String
-//                                                                   range) throws FileNotFoundException {
-//        String fileName = request.getParameter("courseWareName");
-//
-//        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
-//        String systemName = System.getProperty("os.name");
-//        String path;
-//        //如果操作系统是Windows
-//        if (systemName.startsWith("Windows")) {
-//            path = "D:\\upload\\";
-//        }
-//        //如果是Linux
-//        else {
-//            path = "/upload/";
-//        }
-//
-//
-//        File file = new File(path  + fileName);
-//        String contentType = request.getServletContext().getMimeType(fileName);
-//        response.setContentType(mediaType.getType());
-//        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName());
-////        response.setHeader("Accept-Ranges", "bytes");
-////        response.setHeader("Content-Type", contentType);
-//
-//        response.setContentLength((int) file.length());
-//        response.setStatus(response.SC_PARTIAL_CONTENT);
-//
-//
-//        try {
-//            BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(file));
-//
-//            BufferedOutputStream outStream = new BufferedOutputStream(response.getOutputStream());
-////            response.setHeader("Content-Disposition", "inline;filename="+new String(fileName.getBytes("GB2312"),"ISO-8859-1"));
-//
-//            byte[] buffer = new byte[1024];
-//            int bytesRead = 0;
-//            while ((bytesRead = inStream.read(buffer)) != -1) {
-//                outStream.write(buffer, 0, bytesRead);
-//            }
-//            outStream.flush();
-//            inStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
 
     @RequestMapping(value = "/download",method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> getDownload(HttpServletRequest request, HttpServletResponse response,

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.TeachVideoMapper">
+    <insert id="createTeachVideo"  parameterType="com.cqjtu.bysj.entity.TeachVideo"
+            useGeneratedKeys="true" keyProperty="videoId">
+    insert into teach_video
+    (creator_job_no,
+     video_name,
+     course_id,
+     chapter_id,
+     external_link,
+     preview_link)
+    values (#{creatorJobNo,jdbcType=VARCHAR},
+    #{videoName,jdbcType=VARCHAR},
+    #{courseId,jdbcType=BIGINT},
+    #{chapterId,jdbcType=BIGINT},
+    #{externalLink,jdbcType=VARCHAR},
+    #{previewLink,jdbcType=VARCHAR})
+
+    </insert>
+
+
+
+    <select id="getVideoList" resultType="com.cqjtu.bysj.entity.TeachVideo" parameterType="long">
+        select
+        id videoId,
+        video_name videoName,
+
+        external_link externalLink,
+        preview_link previewLink,
+        upload_time uploadTime,
+        creator_job_no creatorJobNo,
+        course_id courseId,
+        chapter_id chapterId
+
+
+
+        from teach_video
+        <where>
+            <if test="chapterId != null and chapterId !=''" >
+                and  chapter_id = #{chapterId}
+            </if>
+
+
+        </where>
+    </select>
+
+
+
+
+
+    <delete id="deleteTeachVideo" parameterType="long">
+        delete from teach_video
+        <if test="videoId !='' and videoId !=null">
+            where id = #{videoId}
+        </if>
+    </delete>
+
+
+
+
+
+
+
+</mapper>

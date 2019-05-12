@@ -17,8 +17,9 @@ public class Chapter {
 
     private String chapterName;
 
-    private String chapterContent;
 
 
     private Integer courseId;
+
+    private String courseName;
 }

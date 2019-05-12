@@ -8,7 +8,9 @@ import java.util.List;
 public interface CourseWareMapper {
     void createCourseWare(CourseWare courseWare);
 
-    List<CourseWare> getCourseWareList(@Param("chapterId") Long chapterId);
+    List<CourseWare> getCourseWareList(@Param("chapterId") Long chapterId,@Param("wareType") Integer wareType);
+
+    List<CourseWare> getCourseWareListByCourseId(@Param("courseId") Integer courseId,@Param("wareType") Integer wareType);
 
     void deleteCourseWare(@Param("courseWareId") Long courseWareId);
 
