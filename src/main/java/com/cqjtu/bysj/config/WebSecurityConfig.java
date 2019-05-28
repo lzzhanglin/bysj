@@ -75,17 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-    @Bean
-    public MyAuthenticationSuccessHandler loginSuccessHandler() {
-        MyAuthenticationSuccessHandler handler = new MyAuthenticationSuccessHandler();
-        return handler;
-    }
 
-    @Bean
-    public MyAuthenticationFailureHandler loginFailureHandler() {
-        MyAuthenticationFailureHandler handler = new MyAuthenticationFailureHandler();
-        return handler;
-    }
 
     @Bean
     @Override

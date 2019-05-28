@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Authentication getAuthentication() {
+
         return SecurityContextHolder.getContext().getAuthentication();
     }
 }

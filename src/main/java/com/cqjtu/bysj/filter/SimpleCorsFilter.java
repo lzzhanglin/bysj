@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-
+//通过在服务器端设置响应头，把发起跨域的原始域名添加到Access-Control-Allow-Origin 即可。
 public class SimpleCorsFilter implements Filter {
 
     @Override

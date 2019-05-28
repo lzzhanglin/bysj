@@ -41,6 +41,10 @@ public class AdminUser implements UserDetails {
         this.password = password;
     }
 
+    public AdminUser() {
+
+    }
+
     public AdminUser(Long userId, String jobNo, String email, String phone, String sex, String birthday, String username, String password) {
         this.userId = userId;
         this.jobNo = jobNo;
