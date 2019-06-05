@@ -46,7 +46,7 @@ public class CourseServiceImplTest {
     @Test
     public void deleteCourse() {
         CourseService mock = mock(CourseService.class);
-        doNothing().when(mock).deleteCourse(isA(Integer.class));
+        doNothing().when(mock).deleteCourse(isA(Long.class));
         mock.deleteCourse(course.getCourseId());
         verify(mock, times(1)).deleteCourse(course.getCourseId());
     }

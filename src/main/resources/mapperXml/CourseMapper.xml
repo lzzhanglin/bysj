@@ -105,7 +105,7 @@
 
 
 
-    <delete id="deleteCourse" parameterType="integer">
+    <delete id="deleteCourse" parameterType="long">
     delete from course
     <if test="courseId !='' and courseId !=null">
     where id = #{courseId}

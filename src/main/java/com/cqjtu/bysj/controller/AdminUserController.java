@@ -19,6 +19,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -101,8 +102,8 @@ public class AdminUserController {
         return new Resp(RespCode.SUCCESS, "hello");
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/batchImport")
-    @ResponseBody
     public Resp upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if (!file.isEmpty()) {
 
@@ -116,9 +117,7 @@ public class AdminUserController {
             return new Resp(RespCode.FAILED, "文件不能为空");
         }
     }
-
-
-
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/download",method = RequestMethod.GET)
         public ResponseEntity<InputStreamResource> getDownload(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
         String fileName = "导入模板.xlsx";
@@ -160,11 +159,9 @@ public class AdminUserController {
             String returnFileName = "";
             try {
                 returnFileName = new String(fileName.getBytes("GB2312"), "ISO-8859-1");
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return ResponseEntity.ok()
                     // Content-Disposition
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + returnFileName)
@@ -174,5 +171,39 @@ public class AdminUserController {
                     .contentLength(file.length()) //
                     .body(resource);
         }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "getAllTeacherAndStudent", method = RequestMethod.GET)
+    public Resp getAllTeacherAndStudent() {
+        return new Resp(RespCode.SUCCESS, adminUserService.getAllTeacherAndStudent());
+    }
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "resetPwd", method = RequestMethod.POST)
+    public Resp resetPwd(HttpServletRequest request) {
+        String jobNo = request.getParameter("jobNo");
+        String newPwd = encoder.encode(jobNo);
+        adminUserService.updatePwdByJobNo(jobNo,newPwd);
+        return new Resp(RespCode.SUCCESS);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    public Resp deleteUser(HttpServletRequest request) {
+        String jobNo = request.getParameter("jobNo");
+        adminUserService.deleteUser(jobNo);
+        return new Resp(RespCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public Resp updateUserProfile(HttpServletRequest request) {
+        String jobNo = request.getParameter("jobNo");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String birthday = request.getParameter("birthday");
+        adminUserService.updateUserProfile(jobNo, email, phone, birthday);
+        return new Resp(RespCode.SUCCESS);
+    }
+
+
 
 }

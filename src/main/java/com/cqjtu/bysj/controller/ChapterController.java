@@ -3,16 +3,13 @@ package com.cqjtu.bysj.controller;
 import com.cqjtu.bysj.entity.Chapter;
 import com.cqjtu.bysj.entity.Resp;
 import com.cqjtu.bysj.entity.RespCode;
+import com.cqjtu.bysj.service.AttachmentService;
 import com.cqjtu.bysj.service.ChapterService;
-import com.cqjtu.bysj.service.CourseService;
-import com.cqjtu.bysj.service.CourseWareService;
-import org.omg.PortableInterceptor.LOCATION_FORWARD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +21,7 @@ public class ChapterController {
     @Autowired
     private ChapterService chapterService;
     @Autowired
-    private CourseWareService courseWareService;
+    private AttachmentService attachmentService;
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public Resp createChapter(HttpServletRequest request) {
@@ -62,7 +59,7 @@ public class ChapterController {
         Long chapterId = Long.valueOf(request.getParameter("chapterId"));
         chapterService.deleteChapter(chapterId);
         //删除章节的同时删除其附带的课件
-        courseWareService.deleteCourseWare(chapterId);
+        attachmentService.deleteFileByChapterId(chapterId);
         return new Resp(RespCode.SUCCESS);
     }
 

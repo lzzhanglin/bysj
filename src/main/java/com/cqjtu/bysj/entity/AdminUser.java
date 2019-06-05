@@ -31,6 +31,8 @@ public class AdminUser implements UserDetails {
 
     private String password;
 
+    private String role;
+
 
 
     private Collection<GrantedAuthority> authorities;

@@ -49,7 +49,11 @@
     <update id="updatePwdByJobNo" parameterType="map">
         update admin_user
         set password = #{newPassword}
-        where job_no = #{jobNo}
+        <where>
+            <if test="jobNo != null and jobNo !=''" >
+                and  job_no = #{jobNo}
+            </if>
+        </where>
     </update>
 
     <insert id="batchImport" parameterType="java.util.List">
@@ -79,6 +83,57 @@
     </insert>
 
 
+<select id="getAllTeacherAndStudent" resultType="com.cqjtu.bysj.entity.AdminUser">
+        select
+         u.id userId,
+         u.username,
+         u.job_no jobNo,
+         u.email,
+         u.phone,
+         u.sex,
+         r.role_name role,
+         u.birthday
+
+         from admin_user u
+    left join sys_user_roles ur
+    on u.job_no = ur.job_no
+    left join sys_role r
+    on ur.roles_id = r.id
+    where r.id > 1
+</select>
+    <delete id="deleteUser" parameterType="string">
+        delete from admin_user
+        <where>
+            <if test="jobNo != null and jobNo !=''" >
+                and  job_no = #{jobNo}
+            </if>
+        </where>
+    </delete>
+    <delete id="deleteUserRole" parameterType="string">
+        delete from sys_user_roles
+        <where>
+            <if test="jobNo != null and jobNo !=''" >
+                and  job_no = #{jobNo}
+            </if>
+        </where>
+    </delete>
+
+    <select id="getAllJobNo" resultType="string">
+        select job_no from admin_user
+    </select>
+
+    <update id="updateUserProfile" parameterType="map">
+        update admin_user
+        set
+        email = #{email},
+        phone = #{phone},
+        birthday = #{birthday}
+        <where>
+            <if test="jobNo != null and jobNo !=''" >
+                and  job_no = #{jobNo}
+            </if>
+        </where>
+    </update>
 
 
 

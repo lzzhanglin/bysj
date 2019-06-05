@@ -31,7 +31,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public void deleteChapterByCourseId(Integer courseId) {
+    public void deleteChapterByCourseId(Long courseId) {
         chapterMapper.deleteChapterByCourseId(courseId);
     }
 

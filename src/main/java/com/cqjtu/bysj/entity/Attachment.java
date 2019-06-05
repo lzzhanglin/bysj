@@ -1,20 +1,24 @@
 package com.cqjtu.bysj.entity;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class TeachVideo {
-    private Long videoId;
+public class Attachment {
 
-    private String videoName;
+    private String attachId;
+
+    private String attachName;
+
+    private String uploadTime;
 
     private Long courseId;
 
     private Long chapterId;
 
-    private String uploadTime;
+    private String fileType;
 
     private String creatorJobNo;
 
@@ -22,5 +26,5 @@ public class TeachVideo {
 
     private String previewLink;
 
-
+    private String describe;
 }

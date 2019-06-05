@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -76,7 +77,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -91,13 +91,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
     @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/websocket/**");//允许访问websocket定义的stomp协议资源
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         logger.info("进入websecurityconfig");
 
-        http.cors().and().csrf().disable().authorizeRequests()
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
+
                 //允许以下请求
                 .antMatchers("/user/hello").permitAll()
-                .antMatchers("/").permitAll()
+                .antMatchers("/websocket").permitAll()
                 // 所有请求需要身份认证
                 .anyRequest().authenticated()
                 .and()

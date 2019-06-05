@@ -21,4 +21,18 @@ public interface AdminUserMapper {
 
     void batchImportUserRole(List<UserRole> userRoleList);
 
+    List<AdminUser> getAllTeacherAndStudent();
+
+    void deleteUser(@Param("jobNo") String jobNo);
+
+    void deleteUserRole(@Param("jobNo") String jobNo);
+
+    List<String> getAllJobNo();
+
+    void updateUserProfile(@Param("jobNo") String jobNo,
+                           @Param("email") String email,
+                           @Param("phone") String phone,
+                           @Param("birthday") String birthday);
+
+
 }

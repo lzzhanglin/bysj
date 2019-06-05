@@ -50,49 +50,6 @@
             </if>
         </where>
     </select>
-    <!--<select id="getAuthByJobNo" resultType="com.cqjtu.bysj.entity.Role" parameterType="string">-->
-    <!--select-->
-    <!--r.id roleId,-->
-    <!--r.role_name roleName-->
-    <!--from sys_user_roles s-->
-    <!--left join sys_role r-->
-
-    <!--on s.roles_id = r.id-->
-    <!--<where>-->
-    <!--<if test="jobNo != null and jobNo !=''" >-->
-    <!--and  job_no = #{jobNo}-->
-    <!--</if>-->
-    <!--</where>-->
-    <!--</select>-->
-    <!--<select id="findUserByJobNo" resultType="com.cqjtu.bysj.entity.AdminUser" parameterType="string">-->
-    <!--select-->
-    <!--id userId,-->
-    <!--username,-->
-    <!--job_no jobNo,-->
-    <!--password,-->
-    <!--email,-->
-    <!--phone,-->
-    <!--sex,-->
-    <!--birthday-->
-    <!--from admin_user-->
-    <!--<where>-->
-    <!--<if test="jobNo != null and jobNo !=''" >-->
-    <!--and  job_no = #{jobNo}-->
-    <!--</if>-->
-    <!--</where>-->
-    <!--</select>-->
-
-    <!--<select id="getArticleTotalNum" resultType="int" parameterType="long">-->
-    <!--select count(title)-->
-    <!--from article-->
-    <!--where user_id = #{userId}-->
-
-
-
-
-    <!--</select>-->
-
-
 
     <delete id="deleteChapter" parameterType="long">
         delete from chapter
@@ -101,78 +58,14 @@
         </if>
     </delete>
 
-    <delete id="deleteChapterByCourseId" parameterType="integer">
+    <delete id="deleteChapterByCourseId" parameterType="long">
         delete from chapter
         <if test="courseId !='' and courseId !=null">
             where course_id = #{courseId}
         </if>
     </delete>
 
-    <!--<select id="viewArticleById" parameterType="long" resultType="com.spring.demo.entity.Article">-->
-    <!--select title ,-->
-    <!--a.id articleId,-->
-    <!--content,-->
-    <!--category_id categoryId,-->
-    <!--username authorName,-->
-    <!--user_id userId-->
-    <!--from-->
-    <!--article a-->
-    <!--left join user u-->
-    <!--on a.user_id = u.id-->
-    <!--where a.id = #{articleId}-->
 
-    <!--</select>-->
-
-    <!--<select id="showArticleTitle" parameterType="java.util.List" resultType="com.spring.demo.entity.Article">-->
-    <!--SELECT title,-->
-    <!--a.id articleId,-->
-    <!--u.username authorName,-->
-    <!--create_time createTime,-->
-    <!--comment_num commentNum-->
-    <!--from-->
-    <!--article a-->
-    <!--left join user u-->
-    <!--on a.user_id = u.id-->
-    <!--where user_id in-->
-    <!--<if test="userIdList != null and userIdList.size() != 0">-->
-    <!--<foreach item="item" index="index" collection="userIdList"-->
-    <!--open="(" separator="," close=")">-->
-    <!--#{item}-->
-    <!--</foreach>-->
-    <!--</if>-->
-    <!--order by a.create_time desc-->
-
-    <!--</select>-->
-
-    <!--<select id="getAllArticleList" parameterType="long" resultType="com.spring.demo.entity.Article">-->
-    <!--select-->
-    <!--a.id articleId,-->
-    <!--title,-->
-    <!--a.create_time createTime,-->
-    <!--a.comment_num commentNum-->
-    <!--from article a-->
-
-    <!--where a.user_id = #{userId}-->
-    <!--order by a.create_time desc-->
-
-    <!--</select>-->
-
-    <!--<update id="updateCommentNum" parameterType="long">-->
-    <!--update article-->
-    <!--set comment_num = comment_num + 1-->
-    <!--where id = #{articleId}-->
-    <!--</update>-->
-
-    <!--<update id="restoreCommentNum" parameterType="long">-->
-    <!--update article-->
-    <!--set comment_num = comment_num - 1-->
-    <!--where id = #{articleId}-->
-    <!--</update>-->
-    <!--<select id="getArticleIdByCommentId" parameterType="long" resultType="long">-->
-    <!--select article_id-->
-    <!--from comments-->
-    <!--where id = #{commentId}-->
-    <!--</select>-->
 
 
 

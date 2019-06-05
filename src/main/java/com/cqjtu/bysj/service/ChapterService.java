@@ -12,7 +12,7 @@ public interface ChapterService {
 
     void deleteChapter(Long chapterId);
 
-    void deleteChapterByCourseId(Integer courseId);
+    void deleteChapterByCourseId(Long courseId);
 
     void updateChapter(Chapter chapter);
 

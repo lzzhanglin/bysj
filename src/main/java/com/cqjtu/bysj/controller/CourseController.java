@@ -44,7 +44,7 @@ public class CourseController {
     private ChapterService chapterService;
 
     @Autowired
-    private CourseWareService courseWareService;
+    private AttachmentService attachmentService;
 
 //    @RolesAllowed({"ROLE_TEACHER"})
 
@@ -89,7 +89,7 @@ public class CourseController {
         String courseKind = request.getParameter("courseKind");
         String timeBegin = request.getParameter("timeBegin");
         String timeEnd = request.getParameter("timeEnd");
-        Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        Long courseId = Long.valueOf(request.getParameter("courseId"));
         Course course = new Course();
         course.setCourseId(courseId);
         course.setCourseKind(courseKind);
@@ -105,11 +105,12 @@ public class CourseController {
     @Secured("ROLE_TEACHER")
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public Resp deleteCourse(HttpServletRequest request) {
-        Integer courseId = Integer.valueOf(request.getParameter("courseId"));
+        Long courseId = Long.valueOf(request.getParameter("courseId"));
         courseService.deleteCourse(courseId);
         //删除课程的同时删除章节以及课件
         chapterService.deleteChapterByCourseId(courseId);
-        courseWareService.deleteCourseWareByCourseId(courseId);
+
+        attachmentService.deleteFileByCourseId(courseId);
         return new Resp(RespCode.SUCCESS);
     }
 }

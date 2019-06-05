@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.AttachmentMapper">
+    <insert id="uploadFile"  parameterType="com.cqjtu.bysj.entity.Attachment"
+            useGeneratedKeys="true" keyProperty="attachId">
+    insert into attachment
+    (id,
+     attach_name,
+     course_id,
+     chapter_id,
+     file_type,
+     creator_job_no,
+     external_link,
+     preview_link,
+     `describe` )
+    values (
+    null,
+    #{attachName,jdbcType=VARCHAR},
+    #{courseId,jdbcType=BIGINT},
+    #{chapterId,jdbcType=BIGINT},
+    #{fileType,jdbcType=VARCHAR},
+    #{creatorJobNo,jdbcType=VARCHAR},
+    #{externalLink,jdbcType=VARCHAR},
+    #{previewLink,jdbcType=VARCHAR},
+    #{describe,jdbcType=VARCHAR})
+
+    </insert>
+
+
+
+    <select id="getFileByType" resultType="com.cqjtu.bysj.entity.Attachment" parameterType="string">
+        select
+        id attachId,
+        attach_name attachName,
+        upload_time uploadTime,
+        course_id courseId,
+        chapter_id chapterId,
+        file_type fileType,
+        creator_job_no creatorJobNo,
+        external_link externalLink,
+        preview_link previewLink,
+        `describe`
+        from attachment
+        <where>
+            <if test="fileType != null and fileType !=''" >
+                and  file_type = #{fileType}
+            </if>
+        </where>
+    </select>
+
+    <select id="getFileByDoubleIdAndType" resultType="com.cqjtu.bysj.entity.Attachment" parameterType="map">
+        select
+        id attachId,
+        attach_name attachName,
+        upload_time uploadTime,
+        course_id courseId,
+        chapter_id chapterId,
+        file_type fileType,
+        creator_job_no creatorJobNo,
+        external_link externalLink,
+        preview_link previewLink,
+        `describe`
+        from attachment
+        <where>
+            <if test="courseId != null and courseId !=''" >
+                and  course_id = #{courseId}
+            </if>
+            <if test="chapterId != null and chapterId !=''" >
+                and  chapter_id = #{chapterId}
+            </if>
+            <if test="fileType != null and fileType !=''" >
+                and  file_type = #{fileType}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getFileByCourseIdAndType" resultType="com.cqjtu.bysj.entity.Attachment" parameterType="map">
+        select
+        id attachId,
+        attach_name attachName,
+        upload_time uploadTime,
+        course_id courseId,
+        chapter_id chapterId,
+        file_type fileType,
+        creator_job_no creatorJobNo,
+        external_link externalLink,
+        preview_link previewLink,
+        `describe`
+        from attachment
+        <where>
+            <if test="courseId != null and courseId !=''" >
+                and  course_id = #{courseId}
+            </if>
+            <if test="fileType != null and fileType !=''" >
+                and  file_type = #{fileType}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteFileById" parameterType="long">
+        delete from attachment
+        <if test="attachId !='' and attachId !=null">
+            where id = #{attachId}
+        </if>
+    </delete>
+
+    <delete id="deleteFileByCourseId" parameterType="long">
+        delete from attachment
+        <if test="courseId !='' and courseId !=null">
+            where course_id = #{courseId}
+        </if>
+    </delete>
+
+    <delete id="deleteFileByChapterId" parameterType="long">
+        delete from attachment
+        <if test="chapterId !='' and chapterId !=null">
+            where chapter_id = #{chapterId}
+        </if>
+    </delete>
+
+
+
+
+
+</mapper>

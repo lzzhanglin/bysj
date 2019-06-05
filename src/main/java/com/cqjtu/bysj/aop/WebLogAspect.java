@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Aspect
 @Component
@@ -32,6 +33,9 @@ public class WebLogAspect {
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (!Objects.equals(attributes, null)) {
+
+
         HttpServletRequest request = attributes.getRequest();
 
         // 记录下请求内容
@@ -41,7 +45,7 @@ public class WebLogAspect {
         logger.info("IP : " + request.getRemoteAddr());
         logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         logger.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
-
+        }
     }
 
     @AfterReturning(returning = "ret", pointcut = "webLog()")

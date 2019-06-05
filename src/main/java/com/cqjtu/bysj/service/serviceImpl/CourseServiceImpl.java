@@ -38,7 +38,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void deleteCourse(Integer courseId) {
+    public void deleteCourse(Long courseId) {
         courseMapper.deleteCourse(courseId);
     }
 }

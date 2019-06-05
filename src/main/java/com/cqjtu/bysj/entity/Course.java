@@ -8,7 +8,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class Course {
-    private Integer courseId;
+    private Long courseId;
 
     private String courseName;
 

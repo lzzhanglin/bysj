@@ -12,5 +12,5 @@ public interface CourseMapper {
 
     void updateCourse(Course course);
 
-    void deleteCourse(@Param("courseId") Integer courseId);
+    void deleteCourse(@Param("courseId") Long courseId);
 }

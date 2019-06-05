@@ -59,6 +59,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public Resp batchImport(MultipartFile file){
+        List<String> jobNoList = adminUserMapper.getAllJobNo();
         List<AdminUser> userList = new ArrayList<>();
         List<String> msgList = new ArrayList<>();
         List<UserRole> userRoleList = new ArrayList<>();
@@ -106,6 +107,11 @@ public class AdminUserServiceImpl implements AdminUserService {
                     }else {
                         row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
                         String jobNo = row.getCell(1).getStringCellValue();
+                        for (String str : jobNoList) {
+                            if (Objects.equals(str, jobNo)) {
+                                msgList.add("第" + j + "行，第2列，账号已存在");
+                            }
+                        }
                         user.setJobNo(jobNo);
                     }
                     //密码
@@ -151,5 +157,22 @@ public class AdminUserServiceImpl implements AdminUserService {
             return new Resp(RespCode.SUCCESS);
         }
 
+    }
+
+    @Override
+    public  List<AdminUser> getAllTeacherAndStudent(){
+
+        return adminUserMapper.getAllTeacherAndStudent();
+    }
+
+    @Override
+    public void deleteUser(String jobNo) {
+        adminUserMapper.deleteUserRole(jobNo);
+        adminUserMapper.deleteUser(jobNo);
+    }
+
+    @Override
+    public void updateUserProfile(String jobNo, String email, String phone, String birthday){
+        adminUserMapper.updateUserProfile(jobNo,email,phone,birthday);
     }
 }
