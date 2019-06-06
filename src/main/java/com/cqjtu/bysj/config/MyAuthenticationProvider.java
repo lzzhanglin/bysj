@@ -1,24 +1,18 @@
 package com.cqjtu.bysj.config;
 
 import com.cqjtu.bysj.entity.AdminUser;
-import com.cqjtu.bysj.security.GrantedAuthorityImpl;
 import com.cqjtu.bysj.service.AdminUserService;
-import com.cqjtu.bysj.service.serviceImpl.MyUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Objects;
 
 @Component
 public class MyAuthenticationProvider implements AuthenticationProvider {
@@ -40,6 +34,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
 
 
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // 获取认证的用户名 & 密码
@@ -57,10 +52,6 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
             logger.info("密码错误");
             throw new BadCredentialsException("密码错误");
         }
-        logger.info("密码是否正确：{}",passwordEncoder.matches(password,dbPassword));
-
-        // 还可以从数据库中查出该用户所拥有的权限,设置到 authorities 中去,这里模拟数据库查询.
-        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         Authentication auth = new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
         AdminUser userInfo = adminUserService.getUserInfoByJobNo(username);
         ((UsernamePasswordAuthenticationToken) auth).setDetails(userInfo);

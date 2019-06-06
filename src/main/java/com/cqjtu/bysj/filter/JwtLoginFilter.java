@@ -2,11 +2,14 @@ package com.cqjtu.bysj.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.cqjtu.bysj.config.FilterConfig;
+import com.cqjtu.bysj.entity.AccessRecord;
 import com.cqjtu.bysj.entity.AdminUser;
 import com.cqjtu.bysj.entity.Role;
 import com.cqjtu.bysj.entity.Route;
 import com.cqjtu.bysj.mapper.AdminUserMapper;
 import com.cqjtu.bysj.security.GrantedAuthorityImpl;
+import com.cqjtu.bysj.service.AccessRecordService;
 import com.cqjtu.bysj.service.AdminUserService;
 import com.cqjtu.bysj.service.serviceImpl.MyUserDetailsService;
 import com.cqjtu.bysj.util.JsonParser;
@@ -34,9 +37,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.util.*;
 
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
+
+
+    @Autowired
+    private AccessRecordService accessRecordService;
 
     private AuthenticationManager authenticationManager;
 
@@ -87,7 +95,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         UsernamePasswordAuthenticationToken  authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
 
         //authenticate()接受一个token参数,返回一个完全经过身份验证的对象，包括证书.
-        // 这里并没有对用户名密码进行验证,而是
+
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
         return authenticate;
@@ -112,6 +120,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authResult) throws IOException {
         logger.info("登录成功");
 
+
+
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 //有效期两小时
@@ -121,66 +131,53 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .compact();
 
         logger.info("token is: Bearer {}", token);
-
-
         AdminUser user = (AdminUser) authResult.getDetails();
+        //登录成功之后将访问记录写入数据库
+        AccessRecord accessRecord = new AccessRecord();
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            if(ip.equals("127.0.0.1")){
+                //根据网卡取本机配置的IP
+                InetAddress inet=null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ip= inet.getHostAddress();
+            }
+        }
+        // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if(ip != null && ip.length() > 15){
+            if(ip.indexOf(",")>0){
+                ip = ip.substring(0,ip.indexOf(","));
+            }
+        }
+        accessRecord.setIP(ip);
+        accessRecord.setJobNo(user.getJobNo());
+        accessRecord.setUsername(user.getUsername());
+        if (accessRecordService == null) {
+            accessRecordService = (AccessRecordService) FilterConfig.getBean("accessRecordService");
+        }
+        accessRecordService.createAccessRecord(accessRecord);
         response.addHeader("token", "Bearer " + token);
 
         String uName = user.getUsername();
         Collection<?extends GrantedAuthority> authorities = user.getAuthorities();
         Iterator iterator = authorities.iterator();
         String role = iterator.next().toString();
-
         response.setStatus(200);
         response.setContentType("application/json;charset=utf-8");
-        Map<String, String> metaMap = new HashMap<>();
-        metaMap.put("title","自述文件");
-        Map<String, String> metaMap1 = new HashMap<>();
-        metaMap1.put("title","系统首页");
-        Map<String, String> metaMap2 = new HashMap<>();
-        metaMap2.put("title","404");
-        Map<String, String> metaMap3 = new HashMap<>();
-        metaMap3.put("title","403");
-        Map<String, String> metaMap4 = new HashMap<>();
-        metaMap4.put("title","创建课程");
-        Map<String, String> metaMap5 = new HashMap<>();
-        metaMap5.put("title","管理课程");
-        Map<String, String> metaMap6 = new HashMap<>();
-        metaMap6.put("title","选课中心");
-        Route dashboard = new Route("'/dashboard'","resolve => require(['../components/page/Dashboard.vue'], resolve)",metaMap1);
-        Route route404 = new Route("/404","resolve => require(['../components/page/404.vue'], resolve)",metaMap2);
-        Route route403 = new Route("/403", " component: resolve => require(['../components/page/403.vue'], resolve)", metaMap3);
-        List<Route> childrenList1 = new ArrayList<>();
-        childrenList1.add(dashboard);
-        childrenList1.add(route404);
-        childrenList1.add(route403);
-        List<Route> childrenList2 = new ArrayList<>();
-        Route createCourse = new Route("create", "resolve => require(['../components/page/CreateCourse.vue'], resolve)", metaMap4);
-        Route manageCourse = new Route("manage", "resolve => require(['../components/page/ManageCourse.vue'], resolve)", metaMap5);
-        Route chooseCourse = new Route("choose", "resolve => require(['../components/page/ChooseCourse.vue'], resolve)", metaMap6);
-        childrenList2.add(createCourse);
-        childrenList2.add(manageCourse);
-        childrenList2.add(chooseCourse);
-        Route route = new Route("/","resolve => require(['../components/common/Home.vue'], resolve)",metaMap,childrenList1);
-        Route route2 = new Route();
-        route2.setPath("/login");
-        route2.setComponent("resolve => require(['../components/page/Login.vue'], resolve)");
-        Route route3 = new Route("*", "/404");
-        Route route4 = new Route("/", "/dashboard");
-        Route routeCourse = new Route("/course", "resolve => require(['../components/common/Home.vue'], resolve)", metaMap, childrenList2);
-        List<Route> lastRoute = new ArrayList<>();
-        lastRoute.add(route);
-        lastRoute.add(route2);
-        lastRoute.add(route3);
-        lastRoute.add(route4);
-        lastRoute.add(routeCourse);
-        //将token写入response
-        String routeStr = JSON.toJSON(lastRoute).toString();
-
         PrintWriter out = response.getWriter();
         String jobNo = user.getJobNo();
-
-        out.write("{\"data\":{\"router\": "+routeStr+"},\"username\":"+"\""+uName+"\","+"\"role\":"+"\""+role+"\",\"jobNo\":"+"\""+jobNo+"\"}");
+        out.write("{\"username\":"+"\""+uName+"\","+"\"role\":"+"\""+role+"\",\"jobNo\":"+"\""+jobNo+"\",\"IP\":"+"\""+ip+"\"}");
         out.flush();
         out.close();
 

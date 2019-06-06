@@ -104,7 +104,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //允许以下请求
                 .antMatchers("/user/hello").permitAll()
-                .antMatchers("/websocket").permitAll()
                 // 所有请求需要身份认证
                 .anyRequest().authenticated()
                 .and()
@@ -119,7 +118,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(authenticationEntryPoint()) ;
+                .authenticationEntryPoint(authenticationEntryPoint());
 
 
     }

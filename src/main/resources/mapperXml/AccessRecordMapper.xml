@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace = "com.cqjtu.bysj.mapper.AccessRecordMapper">
+    <insert id="createAccessRecord"  parameterType="com.cqjtu.bysj.entity.AccessRecord"
+            useGeneratedKeys="true" keyProperty="accessId" >
+    insert into access_record
+    (ip,
+     username,
+     job_no)
+    values (#{IP,jdbcType=VARCHAR},
+    #{username,jdbcType=VARCHAR},
+    #{jobNo,jdbcType=VARCHAR})
+
+    </insert>
+
+    <select id="getRecentRecords" resultType="map">
+        select
+        substring(access_time,1,10) name,
+        count(*) `value`
+        from access_record
+        where to_days(now())-to_days(access_time) &lt;  7
+        GROUP BY substring(access_time,1,10)
+
+    </select>
+
+
+
+
+
+</mapper>

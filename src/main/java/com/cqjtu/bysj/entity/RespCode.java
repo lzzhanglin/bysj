@@ -3,8 +3,9 @@ package com.cqjtu.bysj.entity;
 public enum RespCode {
 
         SUCCESS(200, "操作成功"),
-        PLEASE_LOGIN(403,"未登录，请先登录"),
-        FAILED(500, "操作失败，请检查网络后重试");
+        PLEASE_LOGIN(401,"未登录，请先登录"),
+        FAILED(500, "操作失败，请检查网络后重试"),
+        EXPIRED(401001,"登录信息已过期，请重新登录");
 
         private Integer code;
         private String msg;

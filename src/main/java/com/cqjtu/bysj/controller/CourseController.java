@@ -75,7 +75,7 @@ public class CourseController {
 
     }
 
-    @Secured({"ROLE_TEACHER"})
+//    @Secured({"ROLE_TEACHER"})
     @RequestMapping(value = "/getCourseList", method = RequestMethod.GET)
     public Resp<List<Course>> getCourseList(HttpServletRequest request) {
         List<Course> courseList = courseService.getCourseList();

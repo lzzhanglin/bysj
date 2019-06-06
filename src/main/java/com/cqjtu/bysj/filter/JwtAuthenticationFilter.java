@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
      * 解析token中的信息,并判断是否过期
      */
     @Bean
+//    private UsernamePasswordAuthenticationToken getAuthentication(String token) {
     private UsernamePasswordAuthenticationToken getAuthentication(String token) {
 
 
